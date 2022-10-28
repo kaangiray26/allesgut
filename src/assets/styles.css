@@ -1,0 +1,14 @@
+html {
+    margin: 0;
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    height: 100%;
+    background-color: #1e2d41;
+}
+
+#app {
+    height: 100%;
+}
