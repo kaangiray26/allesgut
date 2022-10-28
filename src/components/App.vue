@@ -21,10 +21,12 @@
                         <div class="mx-2 col-auto badge bg-secondary d-flex align-items-center justify-content-center">
                             <span class="fw-bold">Votes: <span class="fw-bolder">{{ state }}</span></span>
                         </div>
-                        <div v-if="!store.voted" class="col d-flex flex-fill">
+                        <div class="col d-flex flex-fill">
                             <div class="w-100 d-flex justify-content-end">
-                                <button type="button" class="btn btn-outline-dark me-1" @click="thumbs_down">👎</button>
-                                <button type="button" class="btn btn-outline-dark ms-1" @click="thumbs_up">👍</button>
+                                <button type="button" class="btn btn-outline-dark me-1" @click="thumbs_down"
+                                    :disabled="store.voted">👎</button>
+                                <button type="button" class="btn btn-outline-dark ms-1" @click="thumbs_up"
+                                    :disabled="store.voted">👍</button>
                             </div>
                         </div>
                     </div>
@@ -34,11 +36,12 @@
     </div>
 </template>
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import { store } from '/js/store.js';
 import GUN from 'gun';
 
-const gun = GUN();
+const gun = GUN('https://gunjs.herokuapp.com/gun');
+var votes = gun.get('allesgut').get('state');
 const state = ref(0);
 
 const style = computed(() => {
@@ -47,31 +50,13 @@ const style = computed(() => {
     }
 
     if (state.value > 0) {
-        return { 'background-color': '#cfc' };
+        return { 'background-color': 'var(--bs-warning)' };
     }
 
     if (state.value < 0) {
-        return { 'background-color': '#fcc' };
+        return { 'background-color': 'var(--bs-danger)' };
     }
 });
-
-gun.get('allesgut').on((data, key) => {
-    state.value = data.state;
-});
-
-async function alles_init() {
-    gun.get('allesgut').once((data, key) => {
-        if (!data) {
-            gun.get('allesgut').put({ 'state': 0 });
-        } else {
-            state.value = data.state;
-        }
-    });
-    let voted = localStorage.getItem('voted');
-    if (voted && (voted == new Date().getUTCDate())) {
-        store.voted = true;
-    }
-}
 
 async function thumbs_up() {
     state.value++;
@@ -87,7 +72,19 @@ async function thumbs_down() {
     store.voted = true;
 }
 
-onMounted(() => {
-    alles_init();
+votes.on((data) => {
+    state.value = data;
+
+    if (data == null) {
+        votes.put(0);
+        return;
+    } else {
+        state.value = data;
+    }
+
+    let voted = localStorage.getItem('voted');
+    if (voted && (voted == new Date().getUTCDate())) {
+        store.voted = true;
+    }
 });
 </script>
