@@ -36,12 +36,12 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, computed } from 'vue';
 import { store } from '/js/store.js';
 import GUN from 'gun';
 
 const gun = GUN('https://gunjs.herokuapp.com/gun');
-var doc = gun.get('allesgut');
+var doc = gun.get('allesgut').get('votes');
 
 const votes = ref(0);
 const timestamp = ref(0);
@@ -66,30 +66,31 @@ function compare_dates(d1, d2) {
 
 async function thumbs_up() {
     votes.value++;
-    doc.put({ 'votes': votes.value, 'timestamp': Date.now() });
+    gun.get('allesgut').put({ 'votes': votes.value + ' ' + Date.now() });
     localStorage.setItem('voted', Date.now());
     store.voted = true;
 }
 
 async function thumbs_down() {
-    state.value--;
-    doc.put({ 'votes': votes.value, 'timestamp': Date.now() });
+    votes.value--;
+    gun.get('allesgut').put({ 'votes': votes.value + ' ' + Date.now() });
     localStorage.setItem('voted', Date.now());
     store.voted = true;
 }
 
 doc.on((data) => {
-    if (data.votes == null || data.timestamp == null) {
-        doc.put({ 'votes': 0, 'timestamp': Date.now() });
+    if (data == null) {
+        doc.put('0 ' + Date.now());
         return;
     } else {
-        votes.value = data.votes;
-        timestamp.value = data.timestamp;
+        votes.value = parseInt(data.split(' ')[0]);
+        timestamp.value = parseInt(data.split(' ')[1]);
     }
 
-    if (!compare_dates(new Date(data.timestamp), new Date())) {
+    if (!compare_dates(new Date(timestamp.value), new Date())) {
         votes.value = 0;
-        doc.put({ 'votes': 0, 'timestamp': Date.now() });
+        gun.get('allesgut').put({ 'votes': votes.value + ' ' + Date.now() });
+        return;
     }
 
     let voted = localStorage.getItem('voted');
