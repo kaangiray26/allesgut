@@ -1,8 +1,10 @@
 // store.js
-import { reactive } from 'vue';
+import { reactive } from "vue";
 
 const store = reactive({
-    voted: false,
+  voted: false,
+  isLanguageGerman: false,
+  errorText: "",
 });
 
-export { store }
+export { store };
