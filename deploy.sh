@@ -20,6 +20,6 @@ git commit -m "deploy"
 
 git remote add origin git@github.com:kaangiray26/allesgut.git
 
-git push --force origin master:gh-pages
+git push --force origin main:gh-pages
 
 cd ../..
