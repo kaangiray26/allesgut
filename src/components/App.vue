@@ -3,8 +3,7 @@
     <div class="bg-primary" :style="upvotePercentage"></div>
     <div class="bg-danger" :style="downvotePercentage"></div>
   </div>
-  <div
-    class="
+  <div class="
       foreground
       row
       h-100
@@ -12,15 +11,11 @@
       gx-0
       justify-content-center
       align-items-center
-    "
-  >
+    ">
     <div class="col-11 col-sm-6 col-lg-4 col-xl-3 col-xxl-2">
       <div class="card shadow-lg">
         <div class="card-header">
-          <h4
-            class="text-center"
-            style="margin-top: 0.5rem; margin-bottom: 0.5rem"
-          >
+          <h4 class="text-center" style="margin-top: 0.5rem; margin-bottom: 0.5rem">
             Alles gut ?
           </h4>
         </div>
@@ -29,25 +24,17 @@
             <h2 v-show="upvotes - downvotes > 0">JA!</h2>
             <h2 v-show="upvotes - downvotes < 0">NEIN!</h2>
           </div>
-          <div
-            class="
+          <div class="
               d-flex
               flex-column
               justify-content-center
               fw-bolder
               card-text
               text-center
-            "
-          >
-            <span v-show="upvotes - downvotes < 0"
-              ><u>Sadly, most people today are having a bad time 😢</u></span
-            >
-            <span v-show="upvotes - downvotes == 0"
-              ><u>Perfectly balanced, as all things should be.</u></span
-            >
-            <span v-show="upvotes - downvotes > 0"
-              ><u>Most people today are having a good time 🙃</u></span
-            >
+            ">
+            <span v-show="upvotes - downvotes < 0"><u>Sadly, most people today are having a bad time 😢</u></span>
+            <span v-show="upvotes - downvotes == 0"><u>Perfectly balanced, as all things should be.</u></span>
+            <span v-show="upvotes - downvotes > 0"><u>Most people today are having a good time 🙃</u></span>
           </div>
         </div>
         <div class="card-footer">
@@ -66,34 +53,18 @@
                 </tbody>
               </table>
             </div>
-            <div
-              class="
+            <div class="
                 col
                 d-flex
                 flex-fill
                 justify-content-center
                 align-items-center
-              "
-            >
-              <div
-                class="btn-group flex-fill"
-                role="group"
-                aria-label="Basic outlined example"
-              >
-                <button
-                  type="button"
-                  class="btn btn-outline-dark"
-                  @click="thumbs_down"
-                  :disabled="store.voted"
-                >
+              ">
+              <div class="btn-group flex-fill" role="group" aria-label="Basic outlined example">
+                <button type="button" class="btn btn-outline-dark" @click="thumbs_down" :disabled="store.voted">
                   👎
                 </button>
-                <button
-                  type="button"
-                  class="btn btn-outline-dark"
-                  @click="thumbs_up"
-                  :disabled="store.voted"
-                >
+                <button type="button" class="btn btn-outline-dark" @click="thumbs_up" :disabled="store.voted">
                   👍
                 </button>
               </div>
@@ -121,7 +92,7 @@ if (language && typeof language === "string" && language.startsWith("de")) {
   store.isLanguageGerman = true;
 }
 
-const gun = GUN("https://gunjs.herokuapp.com/gun");
+const gun = GUN("https://gun-manhattan.herokuapp.com/gun");
 var doc = gun.get("allesgut").get("data");
 
 const upvotes = ref(0);
